@@ -1,0 +1,18 @@
+---
+title: "Understanding TypeScript Generics"
+date: "2026-01-05"
+summary: "Demystifying <T> in TypeScript."
+tags: ["typescript", "coding", "intermediate"]
+---
+
+Generics allow you to create reusable components that work with a variety of types rather than a single one.
+
+## Basic Syntax
+
+```typescript
+function identity<T>(arg: T): T {
+    return arg;
+}
+```
+
+This ensures type safety while maintaining flexibility. It's a crucial concept for libraries and utility functions.

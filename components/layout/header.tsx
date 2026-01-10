@@ -15,7 +15,7 @@ export async function Header() {
   }))
 
   return (
-    <header className="sticky top-0 z-50 w-full backdrop-blur-md bg-white/70 dark:bg-black/70 border-b border-gray-100 dark:border-gray-800 transition-colors">
+    <header className="sticky top-0 z-50 w-full glass rounded-none border-t-0 border-x-0 border-b border-gray-200/20 dark:border-gray-800/50 transition-colors">
       <div className="container mx-auto max-w-6xl px-6 h-16 flex items-center justify-between">
         <Link href="/" className="font-bold tracking-tighter text-xl shrink-0 mr-4">
           ZC.

@@ -8,10 +8,11 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1, duration: 0.4 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ delay: index * 0.1, duration: 0.4, ease: "easeOut" }}
         >
-            <div className="group relative h-full p-6 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm hover:border-gray-300 dark:hover:border-gray-700 hover:shadow-xl hover:shadow-black/5 dark:hover:shadow-white/5 transition-all duration-300">
+            <div className="group relative h-full p-6 rounded-2xl glass glass-hover">
                 {/* Gradient Accent */}
                 <div className={`absolute inset-x-0 top-0 h-1 rounded-t-2xl bg-gradient-to-r ${project.gradient} opacity-0 group-hover:opacity-100 transition-opacity`} />
 

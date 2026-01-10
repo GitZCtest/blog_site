@@ -157,8 +157,8 @@ export default function AdminPageClient({ posts, projects }: AdminPageClientProp
                     <button
                         onClick={() => setActiveTab('posts')}
                         className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${activeTab === 'posts'
-                                ? 'bg-white dark:bg-gray-900 text-[var(--foreground)] shadow-sm'
-                                : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
+                            ? 'bg-white dark:bg-gray-900 text-[var(--foreground)] shadow-sm'
+                            : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
                             }`}
                     >
                         <FileEdit className="w-4 h-4" />
@@ -167,8 +167,8 @@ export default function AdminPageClient({ posts, projects }: AdminPageClientProp
                     <button
                         onClick={() => setActiveTab('projects')}
                         className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${activeTab === 'projects'
-                                ? 'bg-white dark:bg-gray-900 text-[var(--foreground)] shadow-sm'
-                                : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
+                            ? 'bg-white dark:bg-gray-900 text-[var(--foreground)] shadow-sm'
+                            : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
                             }`}
                     >
                         <Folder className="w-4 h-4" />
@@ -177,8 +177,8 @@ export default function AdminPageClient({ posts, projects }: AdminPageClientProp
                     <button
                         onClick={() => setActiveTab('create')}
                         className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${activeTab === 'create'
-                                ? 'bg-white dark:bg-gray-900 text-[var(--foreground)] shadow-sm'
-                                : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
+                            ? 'bg-white dark:bg-gray-900 text-[var(--foreground)] shadow-sm'
+                            : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
                             }`}
                     >
                         <Plus className="w-4 h-4" />
@@ -208,7 +208,7 @@ export default function AdminPageClient({ posts, projects }: AdminPageClientProp
                                     {posts.map(post => (
                                         <div
                                             key={post.slug}
-                                            className="flex items-center justify-between p-4 rounded-xl bg-white/80 dark:bg-gray-900/80 border border-gray-200 dark:border-gray-800"
+                                            className="flex items-center justify-between p-4 rounded-xl glass"
                                         >
                                             <div className="flex-1 min-w-0">
                                                 <h3 className="font-medium truncate">{post.metadata.title}</h3>
@@ -258,7 +258,7 @@ export default function AdminPageClient({ posts, projects }: AdminPageClientProp
                                     {projects.map(project => (
                                         <div
                                             key={project.id}
-                                            className="p-4 rounded-xl bg-white/80 dark:bg-gray-900/80 border border-gray-200 dark:border-gray-800"
+                                            className="p-4 rounded-xl glass"
                                         >
                                             <div className="flex items-start justify-between mb-3">
                                                 <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${project.gradient} flex items-center justify-center`}>
@@ -313,8 +313,8 @@ export default function AdminPageClient({ posts, projects }: AdminPageClientProp
                                 <button
                                     onClick={() => setCreateMode('write')}
                                     className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-all ${createMode === 'write'
-                                            ? 'bg-white dark:bg-gray-900 text-[var(--foreground)] shadow-sm'
-                                            : 'text-gray-500'
+                                        ? 'bg-white dark:bg-gray-900 text-[var(--foreground)] shadow-sm'
+                                        : 'text-gray-500'
                                         }`}
                                 >
                                     <PenLine className="w-3.5 h-3.5" />
@@ -323,8 +323,8 @@ export default function AdminPageClient({ posts, projects }: AdminPageClientProp
                                 <button
                                     onClick={() => setCreateMode('upload')}
                                     className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-all ${createMode === 'upload'
-                                            ? 'bg-white dark:bg-gray-900 text-[var(--foreground)] shadow-sm'
-                                            : 'text-gray-500'
+                                        ? 'bg-white dark:bg-gray-900 text-[var(--foreground)] shadow-sm'
+                                        : 'text-gray-500'
                                         }`}
                                 >
                                     <Upload className="w-3.5 h-3.5" />
@@ -333,8 +333,8 @@ export default function AdminPageClient({ posts, projects }: AdminPageClientProp
                                 <button
                                     onClick={() => setCreateMode('project')}
                                     className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-all ${createMode === 'project'
-                                            ? 'bg-white dark:bg-gray-900 text-[var(--foreground)] shadow-sm'
-                                            : 'text-gray-500'
+                                        ? 'bg-white dark:bg-gray-900 text-[var(--foreground)] shadow-sm'
+                                        : 'text-gray-500'
                                         }`}
                                 >
                                     <Folder className="w-3.5 h-3.5" />
@@ -345,7 +345,7 @@ export default function AdminPageClient({ posts, projects }: AdminPageClientProp
                             {/* Write Post Form */}
                             {createMode === 'write' && (
                                 <form action={writeAction} className="space-y-6">
-                                    <div className="p-6 rounded-2xl bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border border-gray-200 dark:border-gray-800 shadow-xl shadow-black/5">
+                                    <div className="p-6 rounded-2xl glass shadow-xl shadow-black/5">
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                                             <div>
                                                 <label className="block text-sm font-medium mb-2">标题</label>
@@ -401,7 +401,7 @@ export default function AdminPageClient({ posts, projects }: AdminPageClientProp
                             {createMode === 'upload' && (
                                 <form action={uploadAction} className="space-y-6">
                                     <div
-                                        className={`p-6 rounded-2xl bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-2 border-dashed transition-all ${dragActive ? 'border-blue-500 bg-blue-50/50' : selectedFile ? 'border-green-500 bg-green-50/50' : 'border-gray-300 dark:border-gray-700'
+                                        className={`p-6 rounded-2xl border-2 border-dashed transition-all glass ${dragActive ? 'border-blue-500 bg-blue-50/50' : selectedFile ? 'border-green-500 bg-green-50/50' : 'border-gray-300 dark:border-gray-700'
                                             }`}
                                         onDragEnter={handleDrag}
                                         onDragLeave={handleDrag}
@@ -456,7 +456,7 @@ export default function AdminPageClient({ posts, projects }: AdminPageClientProp
                             {/* Create Project Form */}
                             {createMode === 'project' && (
                                 <form action={projectAction} className="space-y-6">
-                                    <div className="p-6 rounded-2xl bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border border-gray-200 dark:border-gray-800 shadow-xl shadow-black/5">
+                                    <div className="p-6 rounded-2xl glass shadow-xl shadow-black/5">
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                                             <div>
                                                 <label className="block text-sm font-medium mb-2">项目名称</label>

@@ -69,9 +69,9 @@ export default function Home() {
         </FadeIn>
 
         {/* Recent Writing Section */}
-        <FadeIn delay={0.2}>
-          <section>
-            {/* Section Header */}
+        <section>
+          {/* Section Header */}
+          <FadeIn delay={0.2}>
             <div className="flex items-center justify-between mb-10">
               <div className="flex items-center gap-3">
                 <div className="w-1 h-6 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full" />
@@ -82,22 +82,24 @@ export default function Home() {
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
+          </FadeIn>
 
-            {/* Posts Grid */}
-            <div className="space-y-2">
-              {posts.map((post, index) => (
-                <PostCard key={post.slug} post={post} index={index} />
-              ))}
-            </div>
+          {/* Posts Grid */}
+          <div className="space-y-4">
+            {posts.map((post, index) => (
+              <PostCard key={post.slug} post={post} index={index} />
+            ))}
+          </div>
 
-            {/* Empty State */}
-            {posts.length === 0 && (
+          {/* Empty State */}
+          {posts.length === 0 && (
+            <FadeIn delay={0.3}>
               <div className="text-center py-16">
                 <p className="text-gray-500">No posts yet. Start writing!</p>
               </div>
-            )}
-          </section>
-        </FadeIn>
+            </FadeIn>
+          )}
+        </section>
       </div>
     </div>
   );

@@ -34,3 +34,13 @@ body {
   max-width: 65ch;
   margin: 0 auto;
 }
+
+@layer components {
+  .glass {
+    @apply bg-white/60 dark:bg-gray-900/60 backdrop-blur-xl border border-white/20 dark:border-gray-800/50 shadow-lg;
+  }
+  
+  .glass-hover {
+    @apply hover:bg-white/80 dark:hover:bg-gray-900/80 transition-all duration-300;
+  }
+}

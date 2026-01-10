@@ -1,28 +1,15 @@
 [
-    {
-        "id": "proj-001",
-        "title": "Project Alpha",
-        "description": "A minimalist todo list app focused on flow state.",
-        "tags": [
-            "React",
-            "Tailwind"
-        ],
-        "github": "https://github.com/zhangchao/project-alpha",
-        "link": "https://project-alpha.vercel.app",
-        "gradient": "from-blue-500 to-cyan-500",
-        "createdAt": "2026-01-01"
-    },
-    {
-        "id": "proj-002",
-        "title": "Design System",
-        "description": "A unified UI kit for personal projects.",
-        "tags": [
-            "Figma",
-            "Storybook"
-        ],
-        "github": "https://github.com/zhangchao/design-system",
-        "link": "",
-        "gradient": "from-purple-500 to-pink-500",
-        "createdAt": "2026-01-05"
-    }
+  {
+    "id": "proj-002",
+    "title": "Design System",
+    "description": "A unified UI kit for personal projects.",
+    "tags": [
+      "Figma",
+      "Storybook"
+    ],
+    "github": "https://github.com/zhangchao/design-system",
+    "link": "",
+    "gradient": "from-purple-500 to-pink-500",
+    "createdAt": "2026-01-05"
+  }
 ]

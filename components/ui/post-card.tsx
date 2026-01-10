@@ -9,14 +9,15 @@ export function PostCard({ post, index = 0 }: { post: Post; index?: number }) {
   return (
     <motion.article
       initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.1, duration: 0.4 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ delay: index * 0.1, duration: 0.4, ease: "easeOut" }}
       className="group relative"
     >
       <Link href={`/blog/${post.slug}`} className="block">
-        <div className="relative p-6 -mx-6 rounded-2xl transition-all duration-300 hover:bg-gray-50 dark:hover:bg-gray-900/50">
+        <div className="relative p-6 rounded-2xl glass glass-hover group">
           {/* Hover indicator */}
-          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-0 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full transition-all duration-300 group-hover:h-12" />
+          <div className="absolute left-0 top-6 bottom-6 w-1 rounded-r-full bg-gradient-to-b from-blue-500 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1 min-w-0">
