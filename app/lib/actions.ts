@@ -6,7 +6,6 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 import { getAllProjects, saveProjects, Project } from '@/lib/projects';
 
 export async function authenticate(
@@ -19,11 +18,16 @@ export async function authenticate(
 
     await signIn('credentials', {
       password: password,
-      redirect: false
+      redirectTo: '/admin'
     });
 
     console.log('[Debug] Login successful');
   } catch (error) {
+    // Check for NEXT_REDIRECT which is thrown by redirect() on success - let it propagate
+    if (error instanceof Error && error.message.includes('NEXT_REDIRECT')) {
+      throw error;
+    }
+
     if (error instanceof AuthError) {
       switch (error.type) {
         case 'CredentialsSignin':
@@ -32,10 +36,11 @@ export async function authenticate(
           return 'Something went wrong.';
       }
     }
-    throw error;
-  }
 
-  redirect('/admin');
+    // Log unexpected errors for debugging
+    console.error('[Debug] Unexpected error during authentication:', error);
+    return 'Something went wrong.';
+  }
 }
 
 // ============== POST CRUD ==============
