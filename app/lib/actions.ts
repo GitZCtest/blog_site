@@ -1,47 +1,10 @@
 'use server';
 
-import { signIn } from '@/auth';
-import { AuthError } from 'next-auth';
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import { revalidatePath } from 'next/cache';
 import { getAllProjects, saveProjects, Project } from '@/lib/projects';
-
-export async function authenticate(
-  prevState: string | undefined,
-  formData: FormData,
-) {
-  try {
-    const password = formData.get('password');
-    console.log('[Debug] Attempting login...');
-
-    await signIn('credentials', {
-      password: password,
-      redirectTo: '/admin'
-    });
-
-    console.log('[Debug] Login successful');
-  } catch (error) {
-    // Check for NEXT_REDIRECT which is thrown by redirect() on success - let it propagate
-    if (error instanceof Error && error.message.includes('NEXT_REDIRECT')) {
-      throw error;
-    }
-
-    if (error instanceof AuthError) {
-      switch (error.type) {
-        case 'CredentialsSignin':
-          return 'Invalid credentials.';
-        default:
-          return 'Something went wrong.';
-      }
-    }
-
-    // Log unexpected errors for debugging
-    console.error('[Debug] Unexpected error during authentication:', error);
-    return 'Something went wrong.';
-  }
-}
 
 // ============== POST CRUD ==============
 
