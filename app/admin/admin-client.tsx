@@ -12,7 +12,6 @@ import {
 } from '@/app/lib/actions';
 import {
     ArrowLeft,
-    LogOut,
     PenLine,
     Upload,
     FileText,
@@ -25,7 +24,9 @@ import {
     Plus,
     X,
     Github,
-    ExternalLink
+    ExternalLink,
+    Check,
+    AlertTriangle
 } from 'lucide-react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -34,6 +35,20 @@ import { Project } from '@/lib/projects';
 
 type Tab = 'posts' | 'projects' | 'create';
 type CreateMode = 'write' | 'upload' | 'project';
+
+// Types for custom dialogs
+interface ConfirmDialogState {
+    isOpen: boolean;
+    title: string;
+    message: string;
+    onConfirm: () => void;
+}
+
+interface ToastState {
+    isVisible: boolean;
+    message: string;
+    type: 'success' | 'error' | 'warning';
+}
 
 const GRADIENT_OPTIONS = [
     { value: 'from-blue-500 to-cyan-500', label: 'Blue → Cyan' },
@@ -57,6 +72,19 @@ export default function AdminPageClient({ posts, projects }: AdminPageClientProp
     const [editingPost, setEditingPost] = useState<Post | null>(null);
     const [editingProject, setEditingProject] = useState<Project | null>(null);
 
+    // Custom dialog states
+    const [confirmDialog, setConfirmDialog] = useState<ConfirmDialogState>({
+        isOpen: false,
+        title: '',
+        message: '',
+        onConfirm: () => { }
+    });
+    const [toast, setToast] = useState<ToastState>({
+        isVisible: false,
+        message: '',
+        type: 'success'
+    });
+
     // Form states
     const [writeState, writeAction, isWritePending] = useActionState(createPost, null);
     const [uploadState, uploadAction, isUploadPending] = useActionState(uploadPostFile, null);
@@ -69,9 +97,24 @@ export default function AdminPageClient({ posts, projects }: AdminPageClientProp
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
+    // Show toast helper
+    const showToast = (message: string, type: 'success' | 'error' | 'warning' = 'success') => {
+        setToast({ isVisible: true, message, type });
+    };
+
+    // Auto-hide toast
+    useEffect(() => {
+        if (toast.isVisible) {
+            const timer = setTimeout(() => {
+                setToast(prev => ({ ...prev, isVisible: false }));
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [toast.isVisible]);
+
     useEffect(() => {
         if (writeState?.success || uploadState?.success || updatePostState?.success || projectState?.success || updateProjectState?.success) {
-            alert('操作成功!');
+            showToast('操作成功!', 'success');
             setSelectedFile(null);
             setEditingPost(null);
             setEditingProject(null);
@@ -97,7 +140,7 @@ export default function AdminPageClient({ posts, projects }: AdminPageClientProp
             if (file.name.endsWith('.mdx') || file.name.endsWith('.md')) {
                 setSelectedFile(file);
             } else {
-                alert('请上传 .mdx 或 .md 文件');
+                showToast('请上传 .mdx 或 .md 文件', 'error');
             }
         }
     };
@@ -108,18 +151,36 @@ export default function AdminPageClient({ posts, projects }: AdminPageClientProp
         }
     };
 
-    const handleDeletePost = async (slug: string) => {
-        if (confirm('确定要删除这篇文章吗？')) {
-            await deletePost(slug);
-            window.location.reload();
-        }
+    const handleDeletePost = (slug: string) => {
+        setConfirmDialog({
+            isOpen: true,
+            title: '删除文章',
+            message: '确定要删除这篇文章吗？此操作无法撤销。',
+            onConfirm: async () => {
+                await deletePost(slug);
+                setConfirmDialog(prev => ({ ...prev, isOpen: false }));
+                showToast('文章已删除', 'success');
+                window.location.reload();
+            }
+        });
     };
 
-    const handleDeleteProject = async (id: string) => {
-        if (confirm('确定要删除这个项目吗？')) {
-            await deleteProject(id);
-            window.location.reload();
-        }
+    const handleDeleteProject = (id: string) => {
+        setConfirmDialog({
+            isOpen: true,
+            title: '删除项目',
+            message: '确定要删除这个项目吗？此操作无法撤销。',
+            onConfirm: async () => {
+                await deleteProject(id);
+                setConfirmDialog(prev => ({ ...prev, isOpen: false }));
+                showToast('项目已删除', 'success');
+                window.location.reload();
+            }
+        });
+    };
+
+    const closeConfirmDialog = () => {
+        setConfirmDialog(prev => ({ ...prev, isOpen: false }));
     };
 
     return (
@@ -130,6 +191,70 @@ export default function AdminPageClient({ posts, projects }: AdminPageClientProp
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-400/10 rounded-full blur-3xl" />
                 <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-purple-400/10 rounded-full blur-3xl" />
             </div>
+
+            {/* Toast Notification */}
+            <AnimatePresence>
+                {toast.isVisible && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -50, x: '-50%' }}
+                        animate={{ opacity: 1, y: 0, x: '-50%' }}
+                        exit={{ opacity: 0, y: -50, x: '-50%' }}
+                        className="fixed top-6 left-1/2 z-[100] px-4 py-3 rounded-xl shadow-lg flex items-center gap-3"
+                        style={{
+                            backgroundColor: toast.type === 'success' ? 'rgb(34 197 94)' :
+                                toast.type === 'error' ? 'rgb(239 68 68)' : 'rgb(234 179 8)'
+                        }}
+                    >
+                        {toast.type === 'success' && <Check className="w-5 h-5 text-white" />}
+                        {toast.type === 'error' && <AlertCircle className="w-5 h-5 text-white" />}
+                        {toast.type === 'warning' && <AlertTriangle className="w-5 h-5 text-white" />}
+                        <span className="text-white font-medium">{toast.message}</span>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Confirmation Dialog */}
+            <AnimatePresence>
+                {confirmDialog.isOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[90] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
+                        onClick={closeConfirmDialog}
+                    >
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                            onClick={(e) => e.stopPropagation()}
+                            className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl max-w-sm w-full overflow-hidden"
+                        >
+                            <div className="p-6">
+                                <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+                                    <AlertTriangle className="w-6 h-6 text-red-600 dark:text-red-400" />
+                                </div>
+                                <h3 className="text-lg font-bold text-center mb-2">{confirmDialog.title}</h3>
+                                <p className="text-gray-500 dark:text-gray-400 text-center text-sm">{confirmDialog.message}</p>
+                            </div>
+                            <div className="flex border-t border-gray-200 dark:border-gray-800">
+                                <button
+                                    onClick={closeConfirmDialog}
+                                    className="flex-1 px-4 py-3 text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                                >
+                                    取消
+                                </button>
+                                <button
+                                    onClick={confirmDialog.onConfirm}
+                                    className="flex-1 px-4 py-3 text-sm font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors border-l border-gray-200 dark:border-gray-800"
+                                >
+                                    确认删除
+                                </button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             <div className="container mx-auto max-w-5xl py-10 px-6 relative">
                 {/* Header */}
@@ -146,10 +271,7 @@ export default function AdminPageClient({ posts, projects }: AdminPageClientProp
                             管理面板
                         </h1>
                     </div>
-                    <Link href="/api/auth/signout" className="inline-flex items-center text-sm text-red-500 hover:text-red-700 transition-colors">
-                        <LogOut className="w-4 h-4 mr-2" />
-                        退出登录
-                    </Link>
+                    <div className="w-20" /> {/* Spacer for balance */}
                 </div>
 
                 {/* Main Tabs */}
