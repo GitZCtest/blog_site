@@ -4,7 +4,57 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import { revalidatePath } from 'next/cache';
+import { cookies } from 'next/headers';
 import { getAllProjects, saveProjects, Project } from '@/lib/projects';
+
+const ADMIN_COOKIE_NAME = 'admin_session';
+const SESSION_DURATION = 7 * 24 * 60 * 60 * 1000; // 7 days
+
+// ============== AUTHENTICATION ==============
+
+export async function loginAdmin(prevState: any, formData: FormData) {
+  const password = formData.get('password') as string;
+  const adminPassword = process.env.ADMIN_PASSWORD;
+
+  if (!adminPassword) {
+    console.error('ADMIN_PASSWORD environment variable is not set');
+    return { message: '服务器配置错误', success: false };
+  }
+
+  if (!password) {
+    return { message: '请输入密码', success: false };
+  }
+
+  if (password !== adminPassword) {
+    return { message: '密码错误', success: false };
+  }
+
+  // Set session cookie
+  const cookieStore = await cookies();
+  const expires = new Date(Date.now() + SESSION_DURATION);
+
+  cookieStore.set(ADMIN_COOKIE_NAME, 'authenticated', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    expires,
+    path: '/'
+  });
+
+  return { message: '登录成功', success: true };
+}
+
+export async function logoutAdmin() {
+  const cookieStore = await cookies();
+  cookieStore.delete(ADMIN_COOKIE_NAME);
+  return { success: true };
+}
+
+export async function checkAdminAuth(): Promise<boolean> {
+  const cookieStore = await cookies();
+  const session = cookieStore.get(ADMIN_COOKIE_NAME);
+  return session?.value === 'authenticated';
+}
 
 // ============== POST CRUD ==============
 

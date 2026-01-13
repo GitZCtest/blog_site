@@ -8,7 +8,8 @@ import {
     uploadPostFile,
     createProject,
     updateProject,
-    deleteProject
+    deleteProject,
+    logoutAdmin
 } from '@/app/lib/actions';
 import {
     ArrowLeft,
@@ -26,7 +27,8 @@ import {
     Github,
     ExternalLink,
     Check,
-    AlertTriangle
+    AlertTriangle,
+    LogOut
 } from 'lucide-react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -271,7 +273,16 @@ export default function AdminPageClient({ posts, projects }: AdminPageClientProp
                             管理面板
                         </h1>
                     </div>
-                    <div className="w-20" /> {/* Spacer for balance */}
+                    <button
+                        onClick={async () => {
+                            await logoutAdmin();
+                            window.location.href = '/admin-login';
+                        }}
+                        className="inline-flex items-center gap-2 px-3 py-2 text-sm text-gray-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                    >
+                        <LogOut className="w-4 h-4" />
+                        退出登录
+                    </button>
                 </div>
 
                 {/* Main Tabs */}

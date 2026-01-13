@@ -7,6 +7,12 @@ import { Comments } from '@/components/comments'
 import { ReadingProgress } from '@/components/blog/reading-progress'
 import { CustomMDXComponents } from '@/components/mdx/custom-components'
 
+// Allow dynamic params for posts created after build
+export const dynamicParams = true
+
+// Revalidate pages periodically (1 hour)
+export const revalidate = 3600
+
 export async function generateStaticParams() {
   const posts = getAllPosts()
   return posts.map((post) => ({
